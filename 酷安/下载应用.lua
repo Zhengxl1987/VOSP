@@ -1,4 +1,8 @@
-args = {"qq"} --设置时去除
+
+args = {"qq"} -- 添加时去除
+smartOpen("酷安") -- 添加时去除
+
+
 settings = {
     --指令设置
     dl_auto_use_net = {title = "自动使用数据网络下载", summary = "如果提示", t = "checkbox", default = false}
@@ -9,6 +13,7 @@ if (#args < 1) then
     return
 end
 
+require "accessibility"
 ViewFinder().id("menu_badge").waitFor(5000).parent.parent.tryClick()
 waitForId("search_text", 2000).setText(args[1])
 waitForId("search_button").tryClick()
