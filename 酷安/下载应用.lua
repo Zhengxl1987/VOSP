@@ -20,7 +20,7 @@ waitForId("search_button").tryClick()
 
 n = ViewFinder().id("title_view").waitFor(7000) --等待网络加载完成
 if (not n) then
-    speak("失败啦") -- 太直了..
+    speak("失败啦") -- 直..
 end
 
 s = ViewFinder().id("title_view").containsText(args[1]).waitFor(2000) --查找第一个

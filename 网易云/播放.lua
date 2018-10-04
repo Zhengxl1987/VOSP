@@ -41,11 +41,12 @@ function search(text)
     s = ViewFinder().id("search_src_text").await()
     s.setText(text)
 
+    -- 无法获取弹框视图
     bounds = s.getBounds() --(154, 87 - 1055, 185)[1920x1080]
     x = (bounds.left + bounds.right) / 2
     y = bounds.bottom + 100 --276
-    sleep(2000)
-    click(x, y)
+    sleep(1000)
+    click(x, y) -- 
     i = 0
     while (waitForText("加载中", 200)) do --等待结果出现
         sleep(200)
