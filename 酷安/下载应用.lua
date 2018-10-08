@@ -1,7 +1,7 @@
-
-args = {"qq"} -- 添加时去除
-smartOpen("酷安") -- 添加时去除
-
+if runtime.DEBUG then
+    args = {"qq"}
+    smartOpen("酷安")
+end
 
 settings = {
     --指令设置
@@ -23,12 +23,13 @@ if (not n) then
     speak("失败啦") -- 直..
 end
 
-s = ViewFinder().id("title_view").containsText(args[1]).waitFor(2000) --查找第一个
+s = ViewFinder().id("title_view").containsText(args[1]).waitFor(6000) --查找第一个
+print(s)
 if (s) then
     s.tryClick()
     action_button = waitForId("action_button")
     if (action_button.text == "打开") then
-        speak("已下载过啦")
+        speak("已经下载过啦") --
     else
         action_button.tryClick()
         hint_dialog = ViewFinder().containsText("手机移动网络流量").waitFor(1000)

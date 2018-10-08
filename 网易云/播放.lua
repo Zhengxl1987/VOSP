@@ -1,14 +1,17 @@
 require "accessibility"
 -- 正则：播放%
-
+if runtime.DEBUG then
+    p = openAppByWord("网易云", true)
+    waitForApp(p)
+    -- args = {"音乐"}
 -- args = {"本地音乐"}
--- args = {"纸短情长"}
+args = {"纸短情长"}
 -- args = {"每日推荐"}
 -- args = {"我喜欢的音乐"}
 -- args = {"周杰伦的歌"}
 -- args = {"遥远的歌"}
 -- args = {"许嵩的有何不可"}
-
+end
 -- 播放本地音乐
 function playLike()
     inMyMusic("我喜欢的音乐")
@@ -42,11 +45,11 @@ function search(text)
     s.setText(text)
 
     -- 无法获取弹框视图
-    bounds = s.getBounds() --(154, 87 - 1055, 185)[1920x1080]
+    bounds = s.bounds --(154, 87 - 1055, 185)[1920x1080]
     x = (bounds.left + bounds.right) / 2
-    y = bounds.bottom + 100 --276
+    y = bounds.bottom + 100 --276 
     sleep(1000)
-    click(x, y) -- 
+    click(x, y) --fixme
     i = 0
     while (waitForText("加载中", 200)) do --等待结果出现
         sleep(200)
@@ -107,11 +110,12 @@ end
 
 -- 获取参数
 local arg = args[1]
-if (arg == "本地音乐") then
+if (not arg or arg == "音乐") then
+    mediaResume()
+elseif (arg == "本地音乐") then
     playLocal()
 elseif arg == "每日推荐" then
     playDialy()
-    playLocal()
 elseif arg == "我喜欢的音乐" then
     playLike()
 else
