@@ -8,9 +8,9 @@ if runtime.DEBUG then
     -- args = {"纸短情长"}
     -- args = {"每日推荐"}
     -- args = {"我喜欢的音乐"}
-    -- args = {"周杰伦的歌"}
+    args = {"周杰伦的歌"}
     -- args = {"遥远的歌"}
-    args = {"多余的解释"}
+    -- args = {"多余的解释"}
 -- args = {"许嵩的有何不可"} --不再支持
 end
 -- 播放本地音乐
@@ -69,7 +69,7 @@ end
 function playSinger(s, singer)
     search(s)
     --检查列表有此歌s
-    songItem = ViewFinder().similaryText(s).type("TexView").findFirst()
+    songItem = ViewFinder().similaryText(s).type("TextView").findFirst()
     if (songItem and songItem.tryClick()) then
         print("播放" .. s)
     else
