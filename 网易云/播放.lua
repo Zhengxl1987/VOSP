@@ -4,13 +4,14 @@ if runtime.DEBUG then
     p = openAppByWord("网易云", true)
     waitForApp(p)
     -- args = {"音乐"}
--- args = {"本地音乐"}
-args = {"纸短情长"}
--- args = {"每日推荐"}
--- args = {"我喜欢的音乐"}
--- args = {"周杰伦的歌"}
--- args = {"遥远的歌"}
--- args = {"许嵩的有何不可"}
+    -- args = {"本地音乐"}
+    -- args = {"纸短情长"}
+    -- args = {"每日推荐"}
+    -- args = {"我喜欢的音乐"}
+    -- args = {"周杰伦的歌"}
+    -- args = {"遥远的歌"}
+    args = {"多余的解释"}
+-- args = {"许嵩的有何不可"} --不再支持
 end
 -- 播放本地音乐
 function playLike()
@@ -18,7 +19,7 @@ function playLike()
 end
 -- 播放本地音乐
 function playLocal()
-    if (inMyMusic("本地音乐")) then
+    if (not inMyMusic("本地音乐")) then
         speak("未发现本地音乐")
     end
 end
@@ -47,7 +48,7 @@ function search(text)
     -- 无法获取弹框视图
     bounds = s.bounds --(154, 87 - 1055, 185)[1920x1080]
     x = (bounds.left + bounds.right) / 2
-    y = bounds.bottom + 100 --276 
+    y = bounds.bottom + 100 --276
     sleep(1000)
     click(x, y) --fixme
     i = 0
@@ -68,18 +69,18 @@ end
 function playSinger(s, singer)
     search(s)
     --检查列表有此歌s
-    songItem = ViewFinder().id("zt").similaryText(s).findFirst()
+    songItem = ViewFinder().similaryText(s).type("TexView").findFirst()
     if (songItem and songItem.tryClick()) then
         print("播放" .. s)
     else
         --若无点击歌手页，播放
-        v = ViewFinder().equalsText("歌手").await(2000)
+        v = ViewFinder().equalsText("歌手").type("TextView").await(2000)
         print(v)
         v.tryClick()
-        print(1)
-        ViewFinder().id("ob").containsText(singer).await(2000).tryClick() --查找歌手
-        print(2)
-        ViewFinder().id("zt").await(3000).tryClick()
+
+        ViewFinder().type("TextView").containsText(singer).await(2000).tryClick() --查找歌手
+
+        ViewFinder().type("TextView").equalsText("1").await(3000).tryClick() -- 第一首
     end
 end
 
@@ -89,7 +90,7 @@ function playSong(s)
     if (not search(s)) then -- 搜索
         return
     end
-    songItem = ViewFinder().id("zt").similaryText(s).await(2000)
+    songItem = ViewFinder().similaryText(s).type("TextView").await(2000)
     if (songItem and songItem.tryClick()) then
         print("成功")
     else
@@ -125,7 +126,7 @@ else
         if (s[1] == "歌") then
             playSinger(arg, s[0])
         else
-            playSong(s[1]) -- 直接搜索歌名，省去歌手
+            playSong(arg) -- 可能为..的..
         end
     else
         playSong(arg)
