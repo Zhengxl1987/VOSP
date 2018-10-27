@@ -1,6 +1,7 @@
-
 --正则：(((wifi|无线)(热点)?)|(热点))
-
+if (runtime.DEBUG) then
+    runtime.commandType = -1
+end
 wifiApAction = {
     [-1] = function()
         -- 关闭
