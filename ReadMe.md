@@ -8,7 +8,10 @@
 
 可在此提Issues
 
-欢迎你的加入
+[日志](Log.md)
 
+
+
+欢迎你的加入
 
 ![QQ Group](/img/qq_g.png) 
