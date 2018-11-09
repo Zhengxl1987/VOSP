@@ -3,12 +3,13 @@ require "accessibility"
 if runtime.DEBUG then
     p = openAppByWord("网易云", true)
     waitForApp(p)
+    args = {""}
     -- args = {"音乐"}
     -- args = {"本地音乐"}
     -- args = {"纸短情长"}
     -- args = {"每日推荐"}
     -- args = {"我喜欢的音乐"}
-    args = {"周杰伦的歌"}
+    -- args = {"周杰伦的歌"}
     -- args = {"遥远的歌"}
     -- args = {"多余的解释"}
 -- args = {"许嵩的有何不可"} --不再支持
@@ -111,7 +112,7 @@ end
 
 -- 获取参数
 local arg = args[1]
-if (not arg or arg == "音乐") then
+if (not arg or arg == "" or arg == "音乐") then
     mediaResume()
 elseif (arg == "本地音乐") then
     playLocal()

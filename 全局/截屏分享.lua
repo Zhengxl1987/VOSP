@@ -1,6 +1,7 @@
 -- 正则：截屏(分享|发送)?
 if runtime.DEBUG then
     runtime.command = "截屏" -- 测试时模拟命令
+    -- runtime.command = "截屏分享" -- 测试时模拟命令
 end
 
 settings = {
