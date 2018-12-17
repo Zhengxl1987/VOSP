@@ -12,19 +12,24 @@ settings = {
 config = registerSettings("system_call", settings, 1)
 
 if runtime.DEBUG then
--- args = {"移动"}
+    args = {"移动"}
 -- args = {"1234"}
 end
 arg = args[1]
 
-if (not arg) then
+if (not arg or arg == "") then
     speakSync("拨打给谁")
     arg = waitForVoiceParam()
 end
 if (not arg or arg == "") then --无参数
     return
 end
-phone = system.getPhoneByName(arg)
+u = arg
+userContact = system.getContactByName(arg)
+if (userContact) then
+    u = userContact.first
+    phone = userContact.second
+end
 if (not phone) then --查找失败
     if (not alert("未识别该联系人", "选择是否标记该联系人: " .. arg)) then
         return
@@ -35,6 +40,7 @@ if (not phone) then --查找失败
         return
     end
     phone = contacts[selectIndex].second -- 电话
+    u = contacts[selectIndex].first
     -- 添加到联系人标记
     system.saveMarkedContact(arg, arg, phone)
     print(phone)
@@ -64,4 +70,5 @@ if (not id) then
     end
 end
 print(phone, id)
+speakSync("正在呼叫" .. u)
 system.call(phone, id)

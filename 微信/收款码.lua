@@ -1,13 +1,13 @@
 require "accessibility"
 
--- 正则：(收|付)款码
+-- 正则：(收|付)[款钱]码?
 if (runtime.DEBUG) then
     waitForApp(openAppByWord("微信", true)) --启动微信首页
-    runtime.command = "付款码"
+    runtime.command = "付款"
 end
-moreBtn = ViewFinder().desc("更多功能按钮").waitFor(1000)
+moreBtn = ViewFinder().desc("更多功能按钮").waitFor(10000)
 moreBtn.tryClick()
 waitForText("收付款").tryClick()
-if (runtime.command == "收款码") then
+if (string.find(runtime.command,  "收")) then
     waitForText("二维码收款").tryClick()
 end
