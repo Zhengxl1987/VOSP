@@ -12,8 +12,9 @@ settings = {
 config = registerSettings("system_call", settings, 1)
 
 if runtime.DEBUG then
-    args = {"移动"}
--- args = {"1234"}
+    -- args = {"移动"}
+    -- args = {"小可爱"}
+    -- args = {"1234"}
 end
 arg = args[1]
 
@@ -25,10 +26,11 @@ if (not arg or arg == "") then --无参数
     return
 end
 u = arg
-userContact = system.getContactByName(arg)
+userContact = system.getContactByName(arg) --返回Pair<String,String[]> 联系人|号码数组
+
 if (userContact) then
     u = userContact.first
-    phone = userContact.second
+    phone = userContact.second[0] -- 默认第一个号码
 end
 if (not phone) then --查找失败
     if (not alert("未识别该联系人", "选择是否标记该联系人: " .. arg)) then
