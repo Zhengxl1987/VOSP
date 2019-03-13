@@ -2,6 +2,7 @@
     正则: 导航到?(附近的)?% , 带我去(附近的)?%
 
     目前仅支持调用百度地图和高德地图进行导航
+    支持Bmap(需手动选择地点)
 ]]
 if runtime.DEBUG then
     -- args = {"北京"}
@@ -47,6 +48,14 @@ function searchNearbyAmap()
     app.startActivity(intent)
 end
 
+--Bmap导航
+function navByBmap()
+    local i = Intent()
+    i.data = Uri.parse("geo:0,0?q=" .. site) --Bmap需手动设置是否搜索附近
+    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    app.startActivity(i)
+end
+
 if getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
     if (matchValues(runtime.command, "%附近的%")) then
         searchNearbyBaidu()
@@ -59,6 +68,8 @@ elseif getAppInfo("com.autonavi.minimap") then --安装了高德地图
     else
         navWithAmap()
     end
+elseif getAppInfo("me.gfuil.bmap") then --安装了Bmap
+    navByBmap()
 else
     speak("请安装百度地图或高德地图")
 end
