@@ -3,6 +3,8 @@
     %第#个
 ]]
 import "cn.vove7.common.utils.TextDateParser"
+
+requireAccessibility() --需要无障碍，未开启则异常终止
 if (runtime.DEBUG) then
     -- args = {"下载", "1"}
     args = {"点击", "1"}
@@ -13,14 +15,19 @@ local text = args[1]
 print(index)
 
 --搜索 列表
-list = ViewFinder().type({"ListView","RecyclerView","AbsListView"}).findFirst()
+list = ViewFinder().type({"ListView", "RecyclerView", "AbsListView"}).findFirst()
 
 -- list.childs只包含可见的ViewNode
 if (list) then
     if (not text or text == "" or text == "点击") then
         list.childs[index].tryClick()
     else
-        list.childs[index].finder().similaryText(text).findFirst().tryClick()
+        local t = list.childs[index].finder().similaryText(text).findFirst()
+        if (t) then
+            t.tryClick()
+        else --无脑点击
+            list.childs[index].tryClick()
+        end
     end
 else
     speak("未发现列表项")

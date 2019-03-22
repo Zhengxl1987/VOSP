@@ -6,6 +6,7 @@
      */
     fun waitHide(waitMs: Int): Boolean 
 ]]
+requireAccessibility()
 
 result = ViewFinder().equalsText("支付宝").waitHide(5000) -- 等待'支付宝'文字消失 等待时间5s
 

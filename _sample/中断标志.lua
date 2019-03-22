@@ -6,6 +6,6 @@
 -- 点击 停止 按钮 或长按音量下键终止操作
 while (not runtime.userInterrupted) do
     print("doing..")
-    sleep(500)
+    sleep(500) --此处可能抛出异常，脚本将在此处终止
 end
 print("用户终止")
