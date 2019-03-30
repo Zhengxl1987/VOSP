@@ -15,10 +15,9 @@ if (tmp) then
 else
     msgContent = args[2]
 end
-waitForDesc("搜索").tryClick()
+-- 点击搜索按钮
+waitForDesc("更多功能按钮").parent.childs[0].tryClick()
 searchInput = waitForText("搜索")
-print(searchInput)
-searchInput.tryClick()
 sleep(500)
 print(searchInput.setText(toPinyin(name, true)))
 
