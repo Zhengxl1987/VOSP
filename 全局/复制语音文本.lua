@@ -1,18 +1,18 @@
 --[[
-    正则： 复制%  [1]
+    正则： 复制@{text}
     示例：复制1234567890
 ]]
 if (runtime.DEBUG) then
-    -- args = {"123"}
+    argMap["text"] = "我是要复制的内容"
 end
-arg = args[1]
-if (not arg) then
+text = argMap["text"]
+if (not text) then
     speakSync("复制什么")
-    arg = waitForVoiceParam()
+    text = waitForVoiceParam()
 end
-if (arg) then
-    system.setClipText(arg)
+if (text) then
+    system.setClipText(text)
     speak("已复制")
 else
-    speak("无复制内容")
+    toast("无复制内容")
 end

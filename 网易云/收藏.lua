@@ -1,6 +1,6 @@
 -- 正则： 收藏%
 -- Activity： PlayerActivity
-require 'accessibility'
+requireAccessibility()
 -- 判断是否进入主页
 if (not String(runtime.currentActivity).endsWith("PlayerActivity")) then
     -- 进入播放页

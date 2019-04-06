@@ -1,6 +1,9 @@
---%提醒我%
---%通知我%
--- todo 提前xxx 提醒..
+--[[
+   正则：
+   @{date}提醒我@{todo} 
+   @{date}通知我@{todo}
+]]
+
 settings = {
     earlyAlarm = {
         title = "提醒时间",
@@ -13,28 +16,29 @@ settings = {
 config = registerSettings("calendar_event_config", settings, 1)
 if (runtime.DEBUG) then
     -- runtime.command='后天早上九点提前10分钟提醒我开会'
-    runtime.command='2分钟后提醒我睡觉'
-
+    runtime.command='后天早上九点提醒我睡觉'
+    argMap['date'] = "后天早上九点"
+    argMap['todo'] = "开会"
     -- runtime.command='提前1个小时后天早上九点提醒我开会'
     -- runtime.command='提前1天后天早上九点提醒我开会'
-    args = {"后天早上九点", "开会"}
 end
-arg = args[1]
-event = args[2]
-if (not arg) then
+dateText = argMap['date']
+event = argMap['todo']
+
+if (not dateText) then
     speakSync("什么时候")
-    arg = waitForVoiceParam()
+    dateText = waitForVoiceParam()
 end
 if not event then
     speakSync("提醒什么")
     event = waitForVoiceParam()
 end
-if (not event or not arg) then
+if (not event or not dateText) then
     speak("创建失败")
     return
 end
 
-local date = parseDateText(arg) -- 解析日期
+local date = parseDateText(dateText) -- 解析日期
 -- 提醒时间
 local ts = {}
 ts["事件发生时"] = 0

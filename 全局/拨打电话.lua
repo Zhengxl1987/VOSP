@@ -1,8 +1,8 @@
 --[[
     正则：
-     %呼叫%
-     给%打电话
-     打电话给%
+     %呼叫@{name}
+     %给@{name}打电话
+     打电话给@{name}
 
      支持未知联系人标记
 ]]
@@ -11,29 +11,30 @@ settings = {
 }
 config = registerSettings("system_call", settings, 1)
 
-if runtime.DEBUG then
-    -- args = {"移动"}
-    -- args = {"小可爱"}
-    -- args = {"1234"}
-end
-arg = args[1]
+AppBus.INSTANCE.post("cancel_recog")
 
-if (not arg or arg == "") then
-    speakSync("拨打给谁")
-    arg = waitForVoiceParam()
+if runtime.DEBUG then
+    argMap['name'] = "移动"
 end
-if (not arg or arg == "") then --无参数
+name = argMap['name']
+
+if (not name or name == "") then
+    speakSync("拨打给谁")
+    name = waitForVoiceParam()
+end
+if (not name or name == "") then --无参数
+    toast("取消操作")
     return
 end
-u = arg
-userContact = system.getContactByName(arg) --返回Pair<String,String[]> 联系人|号码数组
+u = name
+userContact = system.getContactByName(name) --返回Pair<String,String[]> 联系人|号码数组
 
 if (userContact) then
     u = userContact.first
     phone = userContact.second[0] -- 默认第一个号码
 end
 if (not phone) then --查找失败
-    if (not alert("未识别该联系人", "选择是否标记该联系人: " .. arg)) then
+    if (not alert("未识别该联系人", "选择是否标记该联系人: " .. name)) then
         return
     end
     contacts = system.contacts -- 联系人数组 类型 ：Array<Pair<String(联系人名),String(phone)>>
@@ -44,7 +45,7 @@ if (not phone) then --查找失败
     phone = contacts[selectIndex].second -- 电话
     u = contacts[selectIndex].first
     -- 添加到联系人标记
-    system.saveMarkedContact(arg, arg, phone)
+    system.saveMarkedContact(name, name, phone)
     print(phone)
 end
 -- 选卡

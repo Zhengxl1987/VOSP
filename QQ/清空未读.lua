@@ -1,4 +1,4 @@
-require 'accessibility'
+requireAccessibility()
 
 s = ViewFinder().id('name').equalsText('消息')
 p = s.waitFor()

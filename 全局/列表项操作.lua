@@ -1,17 +1,18 @@
 --[[
     正则:
-    %第#个
+    @{text}第@{#index}个
 ]]
 import "cn.vove7.common.utils.TextDateParser"
 
 requireAccessibility() --需要无障碍，未开启则异常终止
 if (runtime.DEBUG) then
     -- args = {"下载", "1"}
-    args = {"点击", "1"}
--- args = {"更新", "1"}
+    argMap['text'] = "点击"
+    -- argMap['text'] = "下载"
+    argMap['index'] = 1
 end
-local index = TextDateParser.INSTANCE.toNum(args[2])
-local text = args[1]
+local index = argMap['index'] - 1
+local text = argMap['text']
 print(index)
 
 --搜索 列表

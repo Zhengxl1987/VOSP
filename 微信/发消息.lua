@@ -1,19 +1,30 @@
-require "accessibility"
+--[[
+   正则：
+   给@{name}发消息(内容为)?@{message}
+   发消息给@{name_message}
+]]
+requireAccessibility()
 
 -- 正则：发消息给% | 给%发消息(内容为)?%
 -- 发消息给%(内容为)?% 不可行
-if (runtime.DEBUG) then -- 调试
-    args = {"郭正兴","123"}
-    openAppByWord("微信", true)
+if (runtime.DEBUG) then -- 调试    
+    argMap["name"] = "vove"
+    argMap["message"] = "1234"
+    system.openAppByWord("微信", true)
 end
 
-name = args[1]
-tmp = matchValues(name, "%内容为%") --适配 发消息给%(内容为)?%
-if (tmp) then
-    name = tmp[0]
-    msgContent = tmp[1]
-else
-    msgContent = args[2]
+name = argMap["name"]
+msgContent = argMap["message"]
+nm = argMap["name_message"]
+if (nm) then
+    tmp = matchValues(nm, "%内容为%") -- 适配 发消息给%(内容为)?%
+    if (tmp) then
+        name = tmp[0]
+        msgContent = tmp[1]
+    else
+        name = nm
+        msgContent = ""
+    end
 end
 -- 点击搜索按钮
 waitForDesc("更多功能按钮").parent.childs[0].tryClick()
@@ -21,7 +32,7 @@ searchInput = waitForText("搜索")
 sleep(500)
 print(searchInput.setText(toPinyin(name, true)))
 
-p = ViewFinder().similaryText(name).waitFor(5000)
+p = ViewFinder().type('TextView').similaryText(name).waitFor(5000)
 
 p.tryClick() -- 若搜寻失败, 可抛出异常，终止队列后操作
 

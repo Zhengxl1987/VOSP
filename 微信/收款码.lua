@@ -1,8 +1,8 @@
-require "accessibility"
+requireAccessibility()
 
 -- 正则：(收|付)[款钱]码?
 if (runtime.DEBUG) then
-    waitForApp(openAppByWord("微信", true)) --启动微信首页
+    waitForApp(system.openAppByWord("微信", true)) --启动微信首页
     runtime.command = "付款"
 end
 moreBtn = ViewFinder().desc("更多功能按钮").waitFor(10000)

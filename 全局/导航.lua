@@ -1,5 +1,7 @@
 --[[
-    正则: 导航到?(附近的)?% , 带我去(附近的)?%
+    正则: 
+    导航到?(附近的)?@{place} 
+     带我去(附近的)?@{place}
 
     目前仅支持调用百度地图和高德地图进行导航
     支持Bmap(需手动选择地点)
@@ -8,9 +10,9 @@ if runtime.DEBUG then
     -- args = {"北京"}
     -- args = {"浙江杭州"}
     runtime.command = "导航到附近的美食"
-    args = {"附近的美食"}
+    argMap["place"] = "附近的美食"
 end
-site = args[1]
+site = argMap["place"]
 
 --使用百度地图导航
 function navWithBaidu()
@@ -56,19 +58,19 @@ function navByBmap()
     app.startActivity(i)
 end
 
-if getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
+if system.getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
     if (matchValues(runtime.command, "%附近的%")) then
         searchNearbyBaidu()
     else
         navWithBaidu()
     end
-elseif getAppInfo("com.autonavi.minimap") then --安装了高德地图
+elseif system.getAppInfo("com.autonavi.minimap") then --安装了高德地图
     if (matchValues(runtime.command, "%附近的%")) then
         searchNearbyAmap()
     else
         navWithAmap()
     end
-elseif getAppInfo("me.gfuil.bmap") then --安装了Bmap
+elseif system.getAppInfo("me.gfuil.bmap") then --安装了Bmap
     navByBmap()
 else
     speak("请安装百度地图或高德地图")

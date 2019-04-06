@@ -1,4 +1,5 @@
-require "accessibility"
+requireAccessibility()
+
 if runtime.DEBUG then
     waitForApp(openAppByWord("qq", true))
 end

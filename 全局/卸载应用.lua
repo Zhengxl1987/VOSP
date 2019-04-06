@@ -1,6 +1,13 @@
-appName = args[1]
+--[[
+    正则：卸载@{app}
+]]
+if runtime.DEBUG then
+    argMap["app"] = "qq"
+end
+
+appName = argMap["app"]
 print(appName)
-appPkg = getPkgByWord(appName)
+appPkg = system.getPkgByWord(appName)
 print(appPkg)
 if (appPkg) then
     uninstallIntent = Intent(Intent.ACTION_DELETE)

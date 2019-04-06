@@ -1,6 +1,12 @@
+--[[
+    正则： 下载@{appname}
+]]
+requireAccessibility()
+
 if runtime.DEBUG then
-    args = {"qq"}
+    argMap["appname"] = "夸克"
     smartOpen("酷安")
+    sleep(1000)
 end
 
 settings = {
@@ -8,14 +14,15 @@ settings = {
     dl_auto_use_net = {title = "自动使用数据网络下载", summary = "如果提示", t = "checkbox", default = false}
 }
 config = registerSettings("coolapk_auto_dl", settings, 1)
-if (#args < 1) then
-    speak("下载什么")
-    return
+
+appname = argMap["appname"]
+if (not appname or appname == "") then
+    speakSync("下载什么")
+    appname = waitForVoiceParam()
 end
 
-require "accessibility"
-ViewFinder().id("menu_badge").waitFor(5000).parent.parent.tryClick()
-waitForId("search_text", 2000).setText(args[1])
+ViewFinder().type("textview").waitFor(5000).tryClick()
+waitForId("search_text", 2000).setText(appname)
 waitForId("search_button").tryClick()
 
 n = ViewFinder().id("title_view").waitFor(7000) --等待网络加载完成
@@ -23,7 +30,7 @@ if (not n) then
     speak("失败啦") -- 直..
 end
 
-s = ViewFinder().id("title_view").containsText(args[1]).waitFor(6000) --查找第一个
+s = ViewFinder().id("title_view").containsText(appname).waitFor(6000) --查找第一个
 print(s)
 if (s) then
     s.tryClick()

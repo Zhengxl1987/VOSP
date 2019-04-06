@@ -5,15 +5,7 @@ if (runtime.DEBUG) then
 end
 len = String(runtime.command).length() - 2 --lua  一个汉字长度不等1
 print(len)
--- cv = system.musicCurrentVolume
--- print("当前音量：" .. cv)
--- maxV = system.musicMaxVolume
--- print("最大音量：" .. maxV)
 
--- index = len + cv
--- if (index > maxV) then
---     index = maxV - 2
--- end
-for i = 0, len do
+for i = 0, 1.5 * len do
     system.volumeUp()
 end

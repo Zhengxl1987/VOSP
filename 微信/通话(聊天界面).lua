@@ -1,4 +1,4 @@
-require "accessibility"
+requireAccessibility()
 
 -- activity: ChattingUI
 -- 正则： (语音|视频)?通话
