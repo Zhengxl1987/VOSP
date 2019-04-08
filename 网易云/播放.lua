@@ -1,11 +1,11 @@
 --[[
     播放@{song}
+    在歌曲搜索框暂时用发送回车键(root)完成搜索
 ]]
-requireAccessibility()
 if runtime.DEBUG then
     p = system.openAppByWord("网易云", true)
     waitForApp(p)
-    argMap["song"] = ""
+    argMap["song"] = "晴天"
 -- args = {"音乐"}
 -- args = {"本地音乐"}
 -- args = {"纸短情长"}
@@ -48,12 +48,9 @@ function search(text)
     s = ViewFinder().id("search_src_text").await()
     s.setText(text)
 
-    -- 无法获取弹框视图
-    bounds = s.bounds --(154, 87 - 1055, 185)[1920x1080]
-    x = (bounds.left + bounds.right) / 2
-    y = bounds.bottom + 100 --276
-    sleep(1000)
-    click(x, y) --fixme
+    -- 无法获取弹框视图，使用发送按键
+    system.sendKey(66)
+    
     i = 0
     while (waitForText("加载中", 200)) do --等待结果出现
         sleep(200)
@@ -113,16 +110,21 @@ function playDialy()
 end
 
 -- 获取参数
-local arg = argMap['song']
+local arg = argMap["song"]
 if (not arg or arg == "" or arg == "音乐") then
     system.mediaResume()
 elseif (arg == "本地音乐") then
+    requireAccessibility()
     playLocal()
 elseif arg == "每日推荐" then
+    requireAccessibility()
     playDialy()
 elseif arg == "我喜欢的音乐" then
+    requireAccessibility()
+
     playLike()
 else
+    requireAccessibility()
     -- 匹配 %的%
     local s = matchValues(arg, "%的%")
     if (s) then
