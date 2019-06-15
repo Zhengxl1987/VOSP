@@ -30,7 +30,6 @@ function searchNearbyBaidu()
     app.startActivity(intent)
 end
 
-
 --使用高德地图导航
 function navWithAmap()
     local intent = Intent()
@@ -51,6 +50,32 @@ function searchNearbyAmap()
     app.startActivity(intent)
 end
 
+-- 使用高德地图机车版导航
+-- 来源 https://www.bbsmax.com/A/A2dmRykWze/
+function navWithAmap()
+    if (site == nil) then
+        site = "故宫"
+    end
+    local intent = Intent()
+    intent.data = Uri.parse("androidauto://poi?sourceApplication=softname&keywords=" .. site .. "&style=2")
+    intent.setAction(Intent.ACTION_VIEW)
+    intent.addCategory(Intent.CATEGORY_DEFAULT)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    app.startActivity(intent)
+end
+--使用高德地图机车版搜索附近
+function searchNearbyGaoDeAuto()
+    if (site == nil) then
+        site = "美食"
+    end
+    local intent = Intent()
+    intent.data = Uri.parse("androidauto://arroundpoi?sourceApplication=softname&keywords=" .. site .. "&dev=0")
+    intent.setAction(Intent.ACTION_VIEW)
+    intent.addCategory(Intent.CATEGORY_DEFAULT)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    app.startActivity(intent)
+end
+
 --Bmap导航
 function navByBmap()
     local i = Intent()
@@ -60,15 +85,21 @@ function navByBmap()
 end
 
 c = runtime.command
-
+isNear = matchValues(c, "%附近的%")
 if system.getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
-    if (matchValues(c, "%附近的%")) then
+    if (isNear) then
         searchNearbyBaidu()
     else
         navWithBaidu()
     end
 elseif system.getAppInfo("com.autonavi.minimap") then --安装了高德地图
-    if (matchValues(c, "%附近的%")) then
+    if (isNear) then
+        searchNearbyAmap()
+    else
+        navWithAmap()
+    end
+elseif system.getAppInfo("com.autonavi.amapauto") then --安装了高德地图机车版
+    if (isNear) then
         searchNearbyAmap()
     else
         navWithAmap()
