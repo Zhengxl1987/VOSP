@@ -4,6 +4,7 @@
     自动调整(屏幕)?亮度
 ]]
 import "cn.vove7.common.app.AppConfig"
+import 'android.provider.Settings'
 if runtime.DEBUG then
     runtime.command = "最大亮度"
     runtime.command = "最高亮度"
@@ -15,13 +16,20 @@ if runtime.DEBUG then
     runtime.command = "增加亮度"
     runtime.command = "加大亮度"
     runtime.command = "中等亮度"
-    runtime.command = "自动调整亮度"
+    -- runtime.command = "自动调整亮度"
 end
 
-unSupport()
 if (AppConfig.INSTANCE.versionCode <= 155) then
     toast("此指令仅支持1.9.3+版本")
     return
+end
+if (not Settings.System.canWrite(app)) then
+    print("无权限")
+    system.openAppDetail(app.packageName)
+    toast("请授予[修改系统设置]权限")
+    return
+else 
+    print("有权限")
 end
 s = String(runtime.command)
 if (s.contains("最")) then
