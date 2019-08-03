@@ -5,7 +5,7 @@
 if runtime.DEBUG then
     p = system.openAppByWord("网易云", true)
     waitForApp(p)
-    argMap["song"] = "晴天"
+    argMap["song"] = "绝代风华"
 -- args = {"音乐"}
 -- args = {"本地音乐"}
 -- args = {"纸短情长"}
@@ -49,17 +49,15 @@ function search(text)
     s.setText(text)
 
     -- 无法获取弹框视图，使用发送按键
-    system.sendKey(66)
+    input.sendKey(66)
     
     i = 0
-    while (waitForText("加载中", 200)) do --等待结果出现
-        sleep(200)
-    end
-    back()
+    ViewFinder().containsText("加载中").waitHide()
+    -- back()
     print("结果出现") -- 可能网络错误
     s = ViewFinder().containsText("网络未连接").await(100)
     if (s) then
-        speak("没网啦")
+        speak("网络错误")
         return false
     end
     return true
@@ -90,7 +88,7 @@ function playSong(s)
     if (not search(s)) then -- 搜索
         return
     end
-    songItem = ViewFinder().similaryText(s).type("TextView").await(2000)
+    songItem = ViewFinder().containsText(s).type("TextView").await(2000)
     if (songItem and songItem.tryClick()) then
         print("成功")
     else
