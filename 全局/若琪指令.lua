@@ -49,7 +49,8 @@ else
     config.set("rokid_device_id", rokid_device_id)
 end
 
-response = http.postJson(
+response =
+    http.postJson(
     rokid_url,
     {
         type = "asr",
@@ -61,5 +62,8 @@ response = http.postJson(
         }
     }
 )
-
-print(response)
+if (String(response).startsWith("Congratulations")) then
+    speak("发送完成")
+else 
+    toast(response)
+end
