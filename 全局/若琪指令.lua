@@ -18,13 +18,12 @@ if (AppConfig.INSTANCE.versionCode <= 190) then
 end
 
 sp = SpHelper()
-
 firstUse = not sp.containsKey("rokid_first")
 
 if (firstUse) then
     sp.set("rokid_first", true)
     if (dialog.alert("第一次使用，是否查看帮助？", nil)) then
-        system.openUrl("https://vove.gitee.io")
+        system.openUrl("https://vove.gitee.io/2019/08/08/Rokid-Config/")
         return
     end
 end
