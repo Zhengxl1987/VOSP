@@ -19,6 +19,7 @@ function navWithBaidu()
     local intent = Intent()
     intent.data = Uri.parse("baidumap://map/direction?destination=" .. site .. "&src=andr.baidu.openAPIdemo")
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     app.startActivity(intent)
 end
 
@@ -27,16 +28,22 @@ function searchNearbyBaidu()
     local intent = Intent()
     intent.data = Uri.parse("baidumap://map/place/nearby?query=" .. site .. "&src=andr.baidu.openAPIdemo")
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     app.startActivity(intent)
 end
 
 --使用高德地图导航
 function navWithAmap()
+    if (site == nil) then
+        site = "北京"
+    end
+    print("高德导航")
     local intent = Intent()
     intent.data = Uri.parse("androidamap://keywordNavi?sourceApplication=softname&keyword=" .. site .. "&style=2")
     intent.setAction(Intent.ACTION_VIEW)
     intent.addCategory(Intent.CATEGORY_DEFAULT)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     app.startActivity(intent)
 end
 
@@ -47,20 +54,23 @@ function searchNearbyAmap()
     intent.setAction(Intent.ACTION_VIEW)
     intent.addCategory(Intent.CATEGORY_DEFAULT)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     app.startActivity(intent)
 end
 
 -- 使用高德地图机车版导航
 -- 来源 https://www.bbsmax.com/A/A2dmRykWze/
-function navWithAmap()
+function navWithAmapAuto()
     if (site == nil) then
         site = "故宫"
     end
+    print("高德机车导航")
     local intent = Intent()
     intent.data = Uri.parse("androidauto://poi?sourceApplication=softname&keywords=" .. site .. "&style=2")
     intent.setAction(Intent.ACTION_VIEW)
     intent.addCategory(Intent.CATEGORY_DEFAULT)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     app.startActivity(intent)
 end
 --使用高德地图机车版搜索附近
@@ -73,6 +83,7 @@ function searchNearbyGaoDeAuto()
     intent.setAction(Intent.ACTION_VIEW)
     intent.addCategory(Intent.CATEGORY_DEFAULT)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) -- 即使在APP内,也可跳转
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     app.startActivity(intent)
 end
 
@@ -87,24 +98,28 @@ end
 c = runtime.command
 isNear = matchValues(c, "%附近的%")
 if system.getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
+    print("使用百度")
     if (isNear) then
         searchNearbyBaidu()
     else
         navWithBaidu()
     end
 elseif system.getAppInfo("com.autonavi.minimap") then --安装了高德地图
+    print("使用高德")
     if (isNear) then
         searchNearbyAmap()
     else
         navWithAmap()
     end
 elseif system.getAppInfo("com.autonavi.amapauto") then --安装了高德地图机车版
+    print("使用高德机车")
     if (isNear) then
-        searchNearbyAmap()
+        searchNearbyAmapAuto()
     else
-        navWithAmap()
+        navWithAmapAuto()
     end
 elseif system.getAppInfo("me.gfuil.bmap") then --安装了Bmap
+    print("使用BMap")
     navByBmap()
 else
     speak("请安装百度地图或高德地图")
