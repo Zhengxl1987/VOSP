@@ -1,19 +1,24 @@
 --[[
     正则: 
     导航到?(附近的)?@{place} 
-     带我去(附近的)?@{place}
+    用@{app}导航到?(附近的)?@{place} 
+    带我去(附近的)?@{place}
+    用@{app}带我去(附近的)?@{place}
 
-     目前仅支持调用百度地图和高德地图进行导航
+    目前仅支持调用百度地图和高德地图进行导航
     支持Bmap(需手动选择地点)
 ]]
 if runtime.DEBUG then
     -- args = {"北京"}
     -- args = {"浙江杭州"}
-    runtime.command = "导航到附近的美食"
-    argMap["place"] = "附近的美食"
+    -- runtime.command = "导航到附近的美食"
+    -- argMap["place"] = "附近的美食"
+    runtime.command = "用高德带我去北京"
+    argMap["place"] = "北京"
+    argMap["app"] = "百度"
 end
 site = argMap["place"]
-
+navApp = argMap["app"]
 --使用百度地图导航
 function navWithBaidu()
     local intent = Intent()
@@ -95,32 +100,76 @@ function navByBmap()
     app.startActivity(i)
 end
 
+-------------- 开始解析 ---------------------
+
 c = runtime.command
 isNear = matchValues(c, "%附近的%")
-if system.getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
+
+function withBaidu()
     print("使用百度")
     if (isNear) then
         searchNearbyBaidu()
     else
         navWithBaidu()
     end
-elseif system.getAppInfo("com.autonavi.minimap") then --安装了高德地图
-    print("使用高德")
-    if (isNear) then
-        searchNearbyAmap()
-    else
-        navWithAmap()
+end
+
+function withGaode()
+    if system.getAppInfo("com.autonavi.minimap") then --安装了高德地图
+        print("使用高德")
+        if (isNear) then
+            searchNearbyAmap()
+        else
+            navWithAmap()
+        end
+    elseif system.getAppInfo("com.autonavi.amapauto") then --安装了高德地图机车版
+        print("使用高德机车")
+        if (isNear) then
+            searchNearbyAmapAuto()
+        else
+            navWithAmapAuto()
+        end
     end
-elseif system.getAppInfo("com.autonavi.amapauto") then --安装了高德地图机车版
-    print("使用高德机车")
-    if (isNear) then
-        searchNearbyAmapAuto()
+end
+
+if (navApp) then -- 指定了导航软件
+    print("导航软件：" .. navApp)
+    if (String(navApp).contains("高德")) then
+        if system.getAppInfo("com.autonavi.minimap") then
+            withGaode()
+        else
+            speak("请安装高德地图")
+        end
+    elseif (String(navApp).contains("百度")) then
+        if system.getAppInfo("com.baidu.BaiduMap") then
+            withBaidu()
+        else
+            speak("请安装百度地图")
+        end
     else
-        navWithAmapAuto()
+        speak("不支持的导航软件：" .. navApp)
     end
-elseif system.getAppInfo("me.gfuil.bmap") then --安装了Bmap
-    print("使用BMap")
-    navByBmap()
-else
-    speak("请安装百度地图或高德地图")
+else -- 未指定导航软件
+    if system.getAppInfo("com.baidu.BaiduMap") then --安装了百度地图
+        withBaidu()
+    elseif system.getAppInfo("com.autonavi.minimap") then --安装了高德地图
+        print("使用高德")
+        if (isNear) then
+            searchNearbyAmap()
+        else
+            navWithAmap()
+        end
+    elseif system.getAppInfo("com.autonavi.amapauto") then --安装了高德地图机车版
+        print("使用高德机车")
+        if (isNear) then
+            searchNearbyAmapAuto()
+        else
+            navWithAmapAuto()
+        end
+    elseif system.getAppInfo("me.gfuil.bmap") then --安装了Bmap
+        print("使用BMap")
+        navByBmap()
+    else
+        speak("请安装百度地图或高德地图")
+    end
 end
