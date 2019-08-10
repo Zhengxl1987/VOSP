@@ -1,4 +1,4 @@
-require "accessibility"
+requireAccessibility()
 
 -- 正则：面对面建群%
 -- 参数 4位密码

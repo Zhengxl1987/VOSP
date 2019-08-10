@@ -1,4 +1,4 @@
-require "accessibility"
+requireAccessibility()
 
 if (runtime.DEBUG) then -- 调试
     openAppByWord('qq',true)

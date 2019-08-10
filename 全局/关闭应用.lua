@@ -1,4 +1,5 @@
-require "accessibility"
+requireAccessibility()
+
 if runtime.DEBUG then
     argMap["app"] = "网易云"
 end

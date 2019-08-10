@@ -1,4 +1,4 @@
-require "accessibility"
+requireAccessibility()
 import "android.os.Build"
 import "android.provider.Settings"
 import "cn.vove7.jarvis.R"
