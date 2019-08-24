@@ -4,7 +4,7 @@
 requireAccessibility()
 
 if runtime.DEBUG then
-    argMap["appname"] = "夸克"
+    argMap["appname"] = "qq"
     smartOpen("酷安")
     sleep(1000)
 end
@@ -21,7 +21,10 @@ if (not appname or appname == "") then
     appname = waitForVoiceParam()
 end
 
-ViewFinder().type("textview").waitFor(5000).tryClick()
+appbar = ViewFinder().id("app_bar").await(5000)
+searchBox = appbar.finder().depths({0, 1, 0, 0, 1}).findFirst()
+searchBox.tryClick()
+
 waitForId("search_text", 2000).setText(appname)
 waitForId("search_button").tryClick()
 
