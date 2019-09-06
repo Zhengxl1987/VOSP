@@ -7,16 +7,16 @@
      支持未知联系人标记
 ]]
 settings = {
-    card_id = {title = "选择拨打卡号", t = "single_choice", items = {"询问", "默认", "卡1", "卡2"}}
+    card_id = {title = "选择拨打卡号", t = "single_choice", items = {"默认", "询问", "卡1", "卡2"}}
 }
 config = registerSettings("system_call", settings, 1)
 
 AppBus.INSTANCE.post("cancel_recog")
 
 if runtime.DEBUG then
-    argMap['name'] = "移动"
+    argMap["name"] = "移动"
 end
-name = argMap['name']
+name = argMap["name"]
 
 if (not name or name == "") then
     speakSync("拨打给谁")
