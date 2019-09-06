@@ -19,6 +19,10 @@ if (not dateText) then
     dateText = waitForVoiceParam()
 end
 local date = parseDateText(dateText) -- 解析日期
+if(not date) then -- 解析失败
+    notSupport()
+end
+
 local hour = date.get(Calendar.HOUR_OF_DAY) -- 24小时制
 local minute = date.get(Calendar.MINUTE) -- 分
 local dayOfWeek = date.get(Calendar.DAY_OF_WEEK) -- 周

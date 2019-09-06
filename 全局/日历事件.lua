@@ -39,6 +39,9 @@ if (not event or not dateText) then
 end
 
 local date = parseDateText(dateText) -- 解析日期
+if(not date) then -- 解析失败
+    notSupport()
+end
 -- 提醒时间
 local ts = {}
 ts["事件发生时"] = 0
