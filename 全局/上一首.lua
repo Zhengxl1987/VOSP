@@ -1,4 +1,7 @@
 --[[
-    使用内置输入法发送按键
+    需要音乐软件 打开启线控
+    模拟三次耳机中键
 ]]
-input.sendKey(88)
+system.sendKey(79)
+system.sendKey(79)
+system.sendKey(79)
