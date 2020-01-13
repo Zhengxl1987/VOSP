@@ -88,7 +88,8 @@ function playSong(s)
     if (not search(s)) then -- 搜索
         return
     end
-    songItem = ViewFinder().containsText(s).type("TextView").await(2000)
+    -- 直接播放全部
+    songItem = text('播放全部').await(2000)
     if (songItem and songItem.tryClick()) then
         print("成功")
     else
