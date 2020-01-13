@@ -1,5 +1,6 @@
 --[[
-    执行 tasker 任务
+    执行 Tasker 任务
+    Tasker 需后台运行
     task_name 必须保持一致
     regex: 执行任务@{task_name}
 ]]
