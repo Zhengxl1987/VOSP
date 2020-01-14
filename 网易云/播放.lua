@@ -1,50 +1,36 @@
 --[[
-    播放@{song}
-    在歌曲搜索框暂时用发送回车键(root)完成搜索
+    regex: 播放@{song}
+    不自动开启App
+    在歌曲搜索框用发送回车键完成搜索
 ]]
 if runtime.DEBUG then
-    p = system.openAppByWord("网易云", true)
-    waitForApp(p)
     argMap["song"] = "绝代风华"
--- args = {"音乐"}
--- args = {"本地音乐"}
--- args = {"纸短情长"}
--- args = {"每日推荐"}
--- args = {"我喜欢的音乐"}
--- args = {"周杰伦的歌"}
--- args = {"遥远的歌"}
--- args = {"多余的解释"}
--- args = {"许嵩的有何不可"} --不再支持
+--     argMap["song"] = "音乐"
+-- argMap["song"] = "本地音乐"
+-- argMap["song"] = "纸短情长"
+-- argMap["song"] = "每日推荐"
+-- argMap["song"] = "我喜欢的音乐"
+-- argMap["song"] = "我喜欢的歌"
+-- argMap["song"] = "周杰伦的歌"
+-- argMap["song"] = "遥远的歌"
+-- argMap["song"] = "多余的解释"
+-- argMap["song"] = "有何不可"
+-- argMap["song"] = "私人fm"
+-- argMap["song"] = "新歌榜"
+-- argMap["song"] = "飙升榜"
 end
--- 播放本地音乐
-function playLike()
-    inMyMusic("我喜欢的音乐")
+
+function playWithUri(uri)
+    local i=Intent()
+    i.data = Uri.parse(uri)
+    app.startActivity(i)
 end
--- 播放本地音乐
-function playLocal()
-    if (not inMyMusic("本地音乐")) then
-        speak("未发现本地音乐")
-    end
-end
--- 都是在我的音乐 点击 再点击播放的操作
-function inMyMusic(name)
-    local mm = ViewFinder().type("Tab").waitFor()
-    mm.tryClick()
-    ViewFinder().equalsText(name).waitFor(2000).tryClick()
-    mm.tryClick()
-    local a = ViewFinder().equalsText("播放全部").waitFor(2000)
-    if (a) then
-        a.tryClick()
-        return true
-    else
-        return false
-    end
-end
+
 -- 搜索内容
 function search(text)
-    search = ViewFinder().desc({"搜索", "Search"}).await()
-    search.tryClick()
-
+    requireAccessibility()
+    playWithUri('orpheus://search')
+    waitForApp('com.netease.cloudmusic', 'SearchActivity')
     s = ViewFinder().id("search_src_text").await()
     s.setText(text)
 
@@ -75,16 +61,14 @@ function playSinger(s, singer)
         v = ViewFinder().equalsText("歌手").type("TextView").await(2000)
         print(v)
         v.tryClick()
-
+        sleep(1000)
         ViewFinder().type("TextView").containsText(singer).await(2000).tryClick() --查找歌手
-
-        ViewFinder().type("TextView").equalsText("1").await(3000).tryClick() -- 第一首
+        containsText('播放热门').await(5000).tryClick()
     end
 end
 
 -- 搜索播放歌曲s
 function playSong(s)
-    print(s)
     if (not search(s)) then -- 搜索
         return
     end
@@ -98,41 +82,34 @@ function playSong(s)
     end
 end
 
--- 每日推荐
-function playDialy()
-    local tab = ViewFinder().type("Tab")
-    tab.waitFor()
-    local mm = tab.find()[1]
-    mm.tryClick()
-    waitForText("每日推荐", 1000).tryClick()
-    waitForText("播放全部", 5000).tryClick()
-end
-
 -- 获取参数
-local arg = argMap["song"]
-if (not arg or arg == "" or arg == "音乐") then
-    system.mediaResume()
-elseif (arg == "本地音乐") then
-    requireAccessibility()
-    playLocal()
-elseif arg == "每日推荐" then
-    requireAccessibility()
-    playDialy()
-elseif arg == "我喜欢的音乐" then
-    requireAccessibility()
+local song = argMap["song"]
+print(song)
 
-    playLike()
+if (not song or song == "") then
+    system.mediaResume()
+elseif (song == "本地音乐") then
+    playWithUri('orpheus://play_local_music')
+elseif matches(song, "(每日)?(歌曲)?推荐") then
+    playWithUri("orpheus-cortana://voice?action=play&type=general&params={'q':'','entities': [{'type':'keyword','value':'每日歌曲推荐'}]}")
+elseif song == "私人fm" then
+    playWithUri("orpheus-cortana://voice?action=play&type=general&params={'q':'','entities': [{'type':'keyword','value':'私人fm'}]}")
+elseif song == "飙升榜" then
+    playWithUri("orpheus-cortana://voice?action=play&type=general&params={'q':'','entities': [{'type':'keyword','value':'飙升榜'}]}")
+elseif song == "新歌榜" then
+    playWithUri("orpheus-cortana://voice?action=play&type=general&params={'q':'','entities': [{'type':'keyword','value':'新歌榜'}]}")
+elseif song == "音乐" or matches(song, "我喜欢的(音乐|歌)") or matches(song, "收藏的?歌单?") then
+    playWithUri("orpheus-cortana://voice?action=play&type=general&params={'q':'','entities':[{'type':'keyword','value':'我喜欢的音乐'}]}")
 else
-    requireAccessibility()
     -- 匹配 %的%
-    local s = matchValues(arg, "%的%")
+    local s = matchValues(song, "%的%")
     if (s) then
         if (s[1] == "歌") then
-            playSinger(arg, s[0])
+            playSinger(song, s[0])
         else
-            playSong(arg) -- 可能为..的..
+            playSong(song) -- 可能为..的..
         end
     else
-        playSong(arg)
+        playSong(song)
     end
 end
