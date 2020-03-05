@@ -7,11 +7,13 @@ musicApps = {
     "com.netease.cloudmusic",
     "com.kugou.android",
     "com.tencent.qqmusic",
+    "com.apple.android.music",
 }
 actions = {
     "播放",
     "酷狗播放音乐",
     "播放音乐",
+    "AppleMusic音乐播放",
 }
 suc = false
 for i = 1, #musicApps do
@@ -28,5 +30,5 @@ for i = 1, #musicApps do
     end
 end
 if (not suc) then
-    app.toastError("请先安装 网易云音乐/酷狗音乐/QQ音乐", 1)
+    app.toastError("请先安装 网易云音乐/酷狗音乐/QQ音乐/AppleMusic", 1)
 end
