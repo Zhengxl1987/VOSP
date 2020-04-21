@@ -79,7 +79,7 @@ function navWithAmapAuto()
     app.startActivity(intent)
 end
 --使用高德地图机车版搜索附近
-function searchNearbyGaoDeAuto()
+function searchNearbyAmapAuto()
     if (site == nil) then
         site = "美食"
     end
