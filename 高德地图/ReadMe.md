@@ -1,0 +1,12 @@
+
+- 驾车 `amapuri://routePlan/home`
+- 上下班 `amapuri://routecommute`
+- 公交 `amapuri://routePlan/home`
+- 实时公交 `amapuri://realtimeBus/home`
+- 打车 `amapuri://drive/takeTaxi`
+- 旅游 `amapuri://ScenicArea/topic`
+- 步行 `amapuri://routePlan/plan`
+- 骑行 `amapuri://routePlan/plan`
+- 收藏夹 `amapuri://favorites/home`
+- 扫一扫 `amapuri://qrscan/mainView`
+- 共享单车 `amapuri://shareBike/shareBikeMainView`
