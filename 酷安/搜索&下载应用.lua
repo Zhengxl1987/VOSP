@@ -1,13 +1,16 @@
 --[[
-    正则： 下载@{appname}
+    正则： (搜索|下载)@{appname}
 ]]
-requireAccessibility()
 
 if runtime.DEBUG then
+    runtime.command='搜索'
     argMap["appname"] = "qq"
-    smartOpen("酷安")
-    sleep(1000)
 end
+--跳转搜索页面
+i=system.getLaunchIntent('com.coolapk.market')
+i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+i.data=Uri.parse('coolmarket://com.coolapk.market/search')
+app.startActivity(i)
 
 settings = {
     --指令设置
@@ -15,26 +18,35 @@ settings = {
 }
 config = registerSettings("coolapk_auto_dl", settings, 1)
 
+requireAccessibility()
 appname = argMap["appname"]
+action = ''
+if String(runtime.command).contains('搜索') then
+    action = '搜索'
+else
+    action = '下载'
+end
+
 if (not appname or appname == "") then
-    speakSync("下载什么")
+    speakSync(action.."什么")
     appname = waitForVoiceParam()
 end
 
-appbar = ViewFinder().id("app_bar").await(5000)
-searchBox = appbar.finder().depths({0, 1, 0, 0, 1}).findFirst()
-searchBox.tryClick()
+waitForApp('com.coolapk.market','SuperSearchActivity')
+sleep(500)
+id('search_text').text=appname
+id("search_button").tryClick()
 
-waitForId("search_text", 2000).setText(appname)
-waitForId("search_button").tryClick()
-
-n = ViewFinder().id("title_view").waitFor(7000) --等待网络加载完成
-if (not n) then
-    speak("失败啦") -- 直..
+if action == '搜索' then
+  return
 end
 
-s = ViewFinder().id("title_view").containsText(appname).waitFor(6000) --查找第一个
-print(s)
+n = id("title_view").waitFor(7000) --等待网络加载完成
+if (not n) then
+    speak("搜索失败") -- 直..
+end
+
+s = id("title_view").containsText(appname).waitFor(6000) --查找第一个
 if (s) then
     s.tryClick()
     action_button = waitForId("action_button")
@@ -50,5 +62,3 @@ if (s) then
 else
     speak("搜索失败")
 end
-
-print("ok")
