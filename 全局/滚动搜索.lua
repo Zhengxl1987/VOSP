@@ -1,4 +1,3 @@
-import "cn.vove7.common.accessibility.AccessibilityApi"
 
 --[[
     功能：滑动搜索指定文本
@@ -6,15 +5,11 @@ import "cn.vove7.common.accessibility.AccessibilityApi"
     注意：某些页面文字可能无法提取，导致搜索不到
     todo 位置提示
 ]]
-if not AccessibilityApi.Companion.gestureService then
-    toast("需要开启高级无障碍服务")
-    return
-end
-
 -- print(id('list').scrollDown())
+requireAccessibility(1)
 
 if runtime.DEBUG then
-    argMap["text"] = "老北京"
+    argMap["text"] = "关于手机"
 end
 
 searchText = argMap["text"]
@@ -31,7 +26,7 @@ setScreenSize(100, 100)
 --     click(50, 50)
 while not targetView and not targetView2 and not runtime.userInterrupt do
     swipe(50, 70, 50, 10, 150)
-    click(50, 50)
+    click(0, 100)
 
     if os.time() - st > 300 then
         toast("未找到 " .. searchText .. " 歇会...")

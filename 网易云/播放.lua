@@ -35,7 +35,7 @@ function search(text)
     s.setText(text)
 
     -- 无法获取弹框视图，使用发送按键
-    input.sendKey(66)
+    system.sendKey(66)
     
     i = 0
     ViewFinder().containsText("加载中").waitHide()
@@ -73,7 +73,7 @@ function playSong(s)
         return
     end
     -- 直接播放全部
-    songItem = text('播放全部').await(2000)
+    songItem = id('songName').await(2000)
     if (songItem and songItem.tryClick()) then
         print("成功")
     else
