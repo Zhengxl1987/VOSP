@@ -3,6 +3,31 @@
 ]]
 requireAccessibility()
 if runtime.DEBUG then
-    argMap["text"] = "选择脚本"
+    argMap["text"] = "111"
 end
-clickText(argMap["text"])
+
+text = argMap["text"]
+if(String(text).length() > 3) then
+    a = containsText(text).findFirst()
+    print(a)
+    if(a) then
+        if(a.tryClick()) then
+            return
+        end
+    end
+    a = containsDesc(text).findFirst()
+    print(a)
+    if(a) then
+        if(a.tryClick()) then
+        return
+        end
+    end
+else
+    a = ViewFinder().equalsText(text).findFirst()
+    if(a) then
+        if(a.tryClick()) then
+            return
+        end
+    end
+end
+toast("点击"..text.."失败")
