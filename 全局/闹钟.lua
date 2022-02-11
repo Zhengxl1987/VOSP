@@ -8,9 +8,11 @@
 if (runtime.DEBUG) then
     -- argMap["date"] = "明天上午七点半"
     -- argMap["todo"] = "起床"
+    argMap["date"] = "周日早上5点"
+    argMap["todo"] = "起床"
 
-    argMap["date"] = "两小时后"
-    argMap["todo"] = "喝水"
+    -- argMap["date"] = "两小时后"
+    -- argMap["todo"] = "喝水"
 end
 dateText = argMap["date"]
 todo = argMap["todo"]
@@ -29,8 +31,9 @@ local dayOfWeek = date.get(Calendar.DAY_OF_WEEK) -- 周
 
 local today = Calendar.getInstance()
 local nowHour = today.get(Calendar.HOUR_OF_DAY)
-local nowM = today.get(Calendar.HOUR_OF_DAY)
-if todayWeek == dayOfWeek and nowHour * 60 + nowM >= hour * 60 + minute then -- 今天已过去/ 设为明天
+local nowM = today.get(Calendar.MINUTE)
+local todayWeek = today.get(Calendar.DAY_OF_WEEK)
+if todayWeek + 1 <= dayOfWeek then
     days = nil
     print(hour, minute, dayOfWeek)
 elseif (string.find(runtime.command, "每天")) then
